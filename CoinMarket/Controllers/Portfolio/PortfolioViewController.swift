@@ -88,6 +88,10 @@ class PortfolioViewController: UIViewController, UITableViewDataSource, UITableV
             textField.placeholder = "Price"
         }
         
+        // Add cancel button
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancel)
+        
         /// Add amount Cryptocurrencie
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let idCoin = Int((alert?.textFields![0].text)!) ?? 0

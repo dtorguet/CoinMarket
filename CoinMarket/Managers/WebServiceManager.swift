@@ -61,7 +61,6 @@ final class WebServiceManager: NSObject {
         
         Alamofire.request(kUrlPortfolio, headers: headers).responseJSON { response in
             debugPrint(response)
-            print("Response: \(String(describing: response.response?.statusCode))")
             if let status = response.response?.statusCode {
                 if status == 401{
                     self.delegate?.didFailData(receiver: receiver)
@@ -91,29 +90,21 @@ final class WebServiceManager: NSObject {
     ///   - price: price of coin
     ///   - receiver: response receiver
     func addCryptocurrencie(id: Int, amount: Float, price: Float, receiver: FetchProtocol){
-        let urlString: URL = URL(string: kUrlPortfolio)!
-        let sessionConfig = URLSessionConfiguration.ephemeral
-        let json: [String: Any] = ["coin_id": id, "amount": amount, "price_usd": price, "traded_at": Utils.stringDateFormatter()]
-        let jsonData = try! JSONSerialization.data(withJSONObject: json, options: JSONSerialization.WritingOptions.prettyPrinted)
-        var request = URLRequest(url: urlString)
-        sessionConfig.allowsCellularAccess = true
-        sessionConfig.timeoutIntervalForRequest = 15
-        sessionConfig.timeoutIntervalForResource = 15
-        sessionConfig.httpMaximumConnectionsPerHost = 1
-        request.httpMethod = "POST"
+        let parameters: [String: Any] = ["coin_id": id, "amount": amount, "price_usd": price, "traded_at": Utils.stringDateFormatter()]
+        let url = URL(string: kUrlPortfolio)!
+        let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: JSONSerialization.WritingOptions.prettyPrinted)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.post.rawValue
         request.setValue("Basic " + Utils.getBackendAuthAut(), forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
-        let urlSession = URLSession.init(configuration: sessionConfig, delegate: self, delegateQueue: nil)
-        let dataTask: URLSessionDataTask = urlSession.dataTask(with: request) {data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                print(httpResponse.statusCode)
-                let status = httpResponse.statusCode
-                if status == 200{
-                    self.delegate?.didFetch(receiver: receiver)
-                    return
-                }
+        
+        Alamofire.request(request).responseJSON {
+            (response) in
+            debugPrint(response)
+            if let status = response.response?.statusCode {
                 if status == 400{
                     self.delegate?.didFailData(receiver: receiver)
                     return
@@ -123,34 +114,18 @@ final class WebServiceManager: NSObject {
                     return
                 }
             }
-            if error != nil {
-                print(error!.localizedDescription)
-                DispatchQueue.main.sync(execute: {
-                    self.delegate?.didFailData(receiver: receiver)
-                })
-                return
-            }
-            do {
-                if (try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary) != nil {
-                    DispatchQueue.main.async(execute: {
-                         self.delegate?.didFetch(receiver: receiver)
-                    })
+            if let data = response.data, let _ = String(data: data, encoding: .utf8) {
+                do {
+                    if let dict = try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                        DispatchQueue.main.async(execute: {
+                            self.delegate?.didFetch(receiver: receiver)
+                        })
+                    }
+                } catch let error as NSError
+                {
+                    print(error.localizedDescription)
                 }
-            } catch let error as NSError
-            {
-                print(error.localizedDescription)
             }
-            
-        }
-        dataTask.resume()
-    }
-}
-
-extension WebServiceManager: URLSessionDelegate{
-    
-    internal  func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Swift.Void){
-        if challenge.protectionSpace.host.compare(kHost) == .orderedSame {
-            completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
         }
     }
 }
