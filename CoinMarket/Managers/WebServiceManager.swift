@@ -29,13 +29,7 @@ final class WebServiceManager: NSObject {
     ///   - receiver: response receiver
     func fetchCoins(page: Int, receiver: FetchProtocol) {
         Alamofire.request(kUrlCoins + "\(page)").responseJSON { response in
-            print("Request: \(String(describing: response.request))")
-            print("Response: \(String(describing: response.response))")
-            print("Result: \(response.result)")
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                print(httpResponse.statusCode)
-                let status = httpResponse.statusCode
+            if let status = response.response?.statusCode {
                 if status == 401{
                     self.delegate?.didFailData(receiver: receiver)
                     return
@@ -60,44 +54,33 @@ final class WebServiceManager: NSObject {
     ///
     /// - Parameter receiver: response receiver
     func fetchPortfolio(receiver: FetchProtocol) {
-        let urlString: URL = URL(string: kUrlPortfolio)!
-        let sessionConfig = URLSessionConfiguration.ephemeral
-        var request = URLRequest(url: urlString)
-        sessionConfig.allowsCellularAccess = true
-        sessionConfig.timeoutIntervalForRequest = 15
-        sessionConfig.timeoutIntervalForResource = 15
-        sessionConfig.httpMaximumConnectionsPerHost = 1
-        request.httpMethod = "GET"
-        request.setValue("Basic " + Utils.getBackendAuthAut(), forHTTPHeaderField: "Authorization")
-        let urlSession = URLSession.init(configuration: sessionConfig, delegate: self, delegateQueue: nil)
-        let dataTask: URLSessionDataTask = urlSession.dataTask(with: request) {data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                print(httpResponse.statusCode)
-                let status = httpResponse.statusCode
+        let headers: HTTPHeaders = [
+            "Authorization": "Basic " + Utils.getBackendAuthAut(),
+            "Accept": "application/json"
+        ]
+        
+        Alamofire.request(kUrlPortfolio, headers: headers).responseJSON { response in
+            debugPrint(response)
+            print("Response: \(String(describing: response.response?.statusCode))")
+            if let status = response.response?.statusCode {
                 if status == 401{
                     self.delegate?.didFailData(receiver: receiver)
                     return
                 }
             }
-            if error != nil {
-                print(error!.localizedDescription)
-                DispatchQueue.main.sync(execute: {
-                    self.delegate?.didFailData(receiver: receiver)
-                })
-                return
-            }
-            do {
-                if let dict = try JSONSerialization.jsonObject(with: data!, options: []) as? NSDictionary {
-                    DispatchQueue.main.async(execute: {
-                        self.delegate?.dataFromPortfolio(dict: dict, receiver: receiver)
-                    })
+            if let data = response.data, let _ = String(data: data, encoding: .utf8) {
+                do {
+                    if let dict = try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                        DispatchQueue.main.async(execute: {
+                             self.delegate?.dataFromPortfolio(dict: dict, receiver: receiver)
+                        })
+                    }
+                } catch let error as NSError
+                {
+                    print(error.localizedDescription)
                 }
-            } catch let error as NSError
-            {
-                print(error.localizedDescription)
             }
         }
-        dataTask.resume()
     }
     
     /// Handles add cryptocurrenci to portfolio

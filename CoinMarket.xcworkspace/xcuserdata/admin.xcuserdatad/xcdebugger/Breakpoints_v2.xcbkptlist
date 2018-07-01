@@ -26,28 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CoinMarket/Managers/WebServiceManager.swift"
-            timestampString = "552175754.7540489"
+            timestampString = "552176673.034011"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
             landmarkName = "urlSession(_:didReceive:completionHandler:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CoinMarket/Managers/WebServiceManager.swift"
-            timestampString = "552175754.759933"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "fetchCoins(page:receiver:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
