@@ -13,7 +13,7 @@ class HomeCellViewModel: NSObject {
     //MARK: - Constants
     
     /// Model of coin
-    private var modelCoin: Model
+    private var modelCoin: Coin
     
     /// Field name of coin
     public var nameModelText: String
@@ -24,7 +24,7 @@ class HomeCellViewModel: NSObject {
     /// Handles the initialize
     ///
     /// - Parameter model: model of coin
-    init(model: Model) {
+    init(model: Coin) {
         self.modelCoin = model
         self.nameModelText = self.modelCoin.name
         self.symbolModelText = self.modelCoin.symbol

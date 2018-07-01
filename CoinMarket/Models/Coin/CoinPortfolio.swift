@@ -7,7 +7,17 @@
 //
 
 import UIKit
+import RealmSwift
 
-class CoinPortfolio: NSObject {
-
+class CoinPortfolio: Object {
+    /// Model properties
+    @objc dynamic public var coinId : Int = 0
+    @objc dynamic public var amount : String = ""
+    @objc dynamic public var priceUsd : String = ""
+    
+    func fillCoin(dict : NSDictionary) {
+        self.coinId = dict["coin_id"] as? Int ?? 0
+        self.amount = dict["amount"] as? String ?? kNoName
+        self.priceUsd = dict["price_usd"] as? String ?? kNoName
+    }
 }

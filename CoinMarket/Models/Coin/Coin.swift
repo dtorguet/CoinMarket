@@ -7,30 +7,23 @@
 //
 
 import Foundation
+import RealmSwift
 
-final class Coin: NSObject {
+final class Coin: Object {
+    /// Model properties
+    @objc dynamic private var id : Int = 0
+    @objc dynamic public var name : String = ""
+    @objc dynamic public var symbol : String = ""
+    @objc dynamic private var rank : Int = 0
+    @objc dynamic private var price_usd : Int = 0
+    @objc dynamic private var descriptionModel: String = ""
+    @objc dynamic private var url : String = ""
+    @objc dynamic private var extensionUrl : String = ""
     
-    private var id : NSNumber = 0
-    public var name : String = ""
-    public var symbol : String = ""
-    private var rank : NSNumber = 0
-    private var price_usd : NSNumber = 0
-    private var descriptionModel: String = ""
-    private var url : String = ""
-    private var extensionUrl : String = ""
-    
-    
-    /// Handle the init for model
-    ///
-    /// - Parameter dict: dict object
-    init(dict : NSDictionary) {
-        self.id = dict["id"] as? NSNumber ?? 0
+    func fillCoin(dict : NSDictionary) {
+        self.id = dict["id"] as? Int ?? 0
         self.name = dict["name"] as? String ?? kNoName
-        self.name = dict["symbol"] as? String ?? kNoName
-        self.id = dict["rank"] as? NSNumber ?? 0
-        //        self.descriptionModel = dict["description"] as? String ?? kNoName
-        //        self.thumbnailDict = dict["thumbnail"] as? NSDictionary ?? NSDictionary()
-        //        self.extensionUrl = self.thumbnailDict["extension"] as? String ?? kNoName
-        //        self.url = self.thumbnailDict["path"] as? String ?? kNoName
+        self.symbol = dict["symbol"] as? String ?? kNoName
+        self.id = dict["rank"] as? Int ?? 0
     }
 }

@@ -29,6 +29,11 @@ class HomeCellTableViewCell: UITableViewCell {
         self.modelSymbol.text = self.viewModel?.symbolModelText
     }
     
+    /// Handles required actions when view just moved to superview
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        self.layoutIfNeeded()
+    }
     // MARK: - Interactions
     
     override func setSelected(_ selected: Bool, animated: Bool) {

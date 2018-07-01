@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 /// ViewController for coins list
 final class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -14,6 +15,9 @@ final class HomeViewController: UIViewController, UITableViewDataSource, UITable
     
     /// ViewModel for coins
     private var viewModel = HomeViewControllerViewModel()
+    
+    /// Activity view
+    let activityData = ActivityData()
     
     // MARK: - Outlets
     
@@ -25,14 +29,18 @@ final class HomeViewController: UIViewController, UITableViewDataSource, UITable
     /// Handles required actions upon view load
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setActivityView()
         self.viewModel.delegate = self
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 100
     }
     
     /// Handles required actions when view appears
     ///
     /// - Parameter animated: Whether to use animation or not
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.startFetch()
     }
     
     // MARK: - UITableViewDataSource
@@ -56,6 +64,9 @@ final class HomeViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: HomeCellTableViewCell.cellIdentifier(), for: indexPath) as! HomeCellTableViewCell
         cell.viewModel = self.viewModel.cellViewModelAtIndexPath(index: indexPath.row)
+        if indexPath.row == self.viewModel.modelsCount() - 1 {
+            self.viewModel.startFetch()
+        }
         return cell
     }
     
@@ -79,13 +90,45 @@ final class HomeViewController: UIViewController, UITableViewDataSource, UITable
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    // MARK: - Views
+    
+    /// Set activity view just for the first fetch
+    func setActivityView() {
+        NVActivityIndicatorPresenter.sharedInstance.startAnimating(self.activityData)
+        NVActivityIndicatorPresenter.sharedInstance.setMessage("Loading CoinsMarket")
+    }
 }
 
 extension HomeViewController: DidFetchDelegate {
+    
     /// Handles when fetch is finish
     func didFetch() {
         self.tableView.reloadData()
+        NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+    }
+    
+    /// Halldes when no network
+    func noNetwork() {
+         NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+        // Create action sheet instance
+        let alert = UIAlertController(title: "UPS!!!", message: "It seems you don't have a network connection", preferredStyle: .alert)
+        
+        // Add cancel button
+        let cancel = UIAlertAction(title: "Got it", style: .cancel, handler: nil)
+        alert.addAction(cancel)
+        
+        if self.viewModel.modelsCount() == 0 {
+            // Add reload button
+            let reload = UIAlertAction(title: "Reload", style: .default, handler: { _ in
+                self.viewModel.startFetch()
+            })
+            alert.addAction(reload)
+        }
+        
+        // Present action sheet
+        self.present(alert, animated: true) {
+        }
     }
 }
 

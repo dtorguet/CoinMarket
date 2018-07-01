@@ -1,0 +1,42 @@
+PODS:
+  - Alamofire (4.7.2)
+  - Charts (3.1.1):
+    - Charts/Core (= 3.1.1)
+  - Charts/Core (3.1.1)
+  - NVActivityIndicatorView (4.2.1):
+    - NVActivityIndicatorView/Presenter (= 4.2.1)
+  - NVActivityIndicatorView/Presenter (4.2.1)
+  - ReachabilitySwift (4.1.0)
+  - Realm (3.7.4):
+    - Realm/Headers (= 3.7.4)
+  - Realm/Headers (3.7.4)
+  - RealmSwift (3.7.4):
+    - Realm (= 3.7.4)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.7)
+  - Charts
+  - NVActivityIndicatorView
+  - ReachabilitySwift
+  - RealmSwift
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - Charts
+    - NVActivityIndicatorView
+    - ReachabilitySwift
+    - Realm
+    - RealmSwift
+
+SPEC CHECKSUMS:
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  Charts: 90a4d61da0f6e06684c591e3bcab11940fe61736
+  NVActivityIndicatorView: 8068ba3ad39cb44cbaab25d89ff2546b3f092681
+  ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
+  Realm: a469bb59e33f9926102ccaea4349822c53b9117e
+  RealmSwift: a45861b21c180f5cf0f122144b9759fa8dde3e9e
+
+PODFILE CHECKSUM: 5f8b0fbad5143144d093d8ee8a3e521b3cf3f0bb
+
+COCOAPODS: 1.5.3
