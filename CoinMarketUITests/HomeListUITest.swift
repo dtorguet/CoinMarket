@@ -21,6 +21,7 @@ class HomeListUITest: XCTestCase {
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
         self.app = XCUIApplication()
+        self.app.launch()
     }
     
     override func tearDown() {
@@ -28,14 +29,16 @@ class HomeListUITest: XCTestCase {
         super.tearDown()
     }
     
-    func testViewsEsxists() {
-        self.app.launch()
+    /// Handles the exist tableview
+    func testTableViewEsxist() {
         let HomeTableView = app.tables["HomeTableView"]
-        let PortfolioBarButton = app.buttons["PortfolioButton"]
         
         XCTAssertTrue(HomeTableView.exists, "The HomeTableView exists")
-        XCTAssertTrue(PortfolioBarButton.exists, "The HomeList BarButton exists")
-        
     }
-    
+    /// Handles the exist Button
+    func testPortfolioButtonEsxist() {
+        let PortfolioBarButton = app.buttons["PortfolioButton"]
+        
+        XCTAssertTrue(PortfolioBarButton.exists, "The HomeList BarButton exists")
+    }
 }
