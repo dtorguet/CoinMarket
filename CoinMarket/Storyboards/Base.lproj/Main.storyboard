@@ -81,6 +81,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="NwN-Re-KuE">
                         <barButtonItem key="rightBarButtonItem" systemItem="organize" id="Hrz-p6-95P">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="PortfolioButton"/>
+                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <segue destination="bfd-Qw-KiY" kind="show" id="3lg-gJ-v50"/>
                             </connections>

@@ -33,6 +33,7 @@ final class HomeViewController: UIViewController, UITableViewDataSource, UITable
         self.viewModel.delegate = self
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 100
+        self.tableView.accessibilityIdentifier = "HomeTableView"
     }
     
     /// Handles required actions when view appears

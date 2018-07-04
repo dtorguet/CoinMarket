@@ -15,15 +15,13 @@ final class Coin: Object {
     @objc dynamic public var name : String = ""
     @objc dynamic public var symbol : String = ""
     @objc dynamic private var rank : Int = 0
-    @objc dynamic private var price_usd : Int = 0
-    @objc dynamic private var descriptionModel: String = ""
-    @objc dynamic private var url : String = ""
-    @objc dynamic private var extensionUrl : String = ""
+    @objc dynamic private var price : Int = 0
     
     func fillCoin(dict : NSDictionary) {
         self.id = dict["id"] as? Int ?? 0
         self.name = dict["name"] as? String ?? kNoName
         self.symbol = dict["symbol"] as? String ?? kNoName
-        self.id = dict["rank"] as? Int ?? 0
+        self.rank = dict["rank"] as? Int ?? 0
+        self.price = dict["price_usd"] as? Int ?? 0
     }
 }

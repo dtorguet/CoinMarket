@@ -37,7 +37,6 @@ final class DataModelsManager: NSObject {
                 let modelsObjects = dataObjects["data"] as! [NSDictionary]
                 for i in 0 ..< modelsObjects.count {
                     let item =  modelsObjects[i]
-                    //let model = Coin(dict:item)
                     let model = Coin()
                     model.fillCoin(dict: item)
                     arrayOfModels.append(model)

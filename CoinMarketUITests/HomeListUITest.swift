@@ -8,8 +8,11 @@
 
 import XCTest
 
-class CoinMarketUITests: XCTestCase {
-        
+class HomeListUITest: XCTestCase {
+    
+    /// Instance of myApp
+    var app: XCUIApplication!
+    
     override func setUp() {
         super.setUp()
         
@@ -17,10 +20,7 @@ class CoinMarketUITests: XCTestCase {
         
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-        // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        XCUIApplication().launch()
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        self.app = XCUIApplication()
     }
     
     override func tearDown() {
@@ -28,9 +28,14 @@ class CoinMarketUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testViewsEsxists() {
+        self.app.launch()
+        let HomeTableView = app.tables["HomeTableView"]
+        let PortfolioBarButton = app.buttons["PortfolioButton"]
+        
+        XCTAssertTrue(HomeTableView.exists, "The HomeTableView exists")
+        XCTAssertTrue(PortfolioBarButton.exists, "The HomeList BarButton exists")
+        
     }
     
 }
